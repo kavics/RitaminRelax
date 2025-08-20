@@ -416,3 +416,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# sensenet
+install-services-core.zip
+**/install-services-core.zip
+**/install-services-core
+**/App_Data/LocalIndex
+**/App_Data/Logs

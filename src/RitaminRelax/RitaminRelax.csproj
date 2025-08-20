@@ -4,10 +4,34 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>30ca434a-c8f9-4040-8ce0-be6c3ad9c67d</UserSecretsId>
+	<Version>1.0.0</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Markdig" Version="0.40.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.5.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.1" />
+    <PackageReference Include="SenseNet.AI.Text.SemanticKernel" Version="0.0.3" />
+    <PackageReference Include="SenseNet.ContentRepository.MsSql" Version="1.1.0" />
+    <PackageReference Include="SenseNet.OData" Version="1.1.0" />
+    <PackageReference Include="SenseNet.OpenApi" Version="1.1.0" />
+    <PackageReference Include="SenseNet.Search.Lucene29.Local" Version="7.5.0" />
+    <PackageReference Include="SenseNet.Security.EFCSecurityStore" Version="3.2.0" />
+    <PackageReference Include="SenseNet.Services.Core" Version="1.1.0" />
+    <PackageReference Include="SenseNet.Services.Core.Install" Version="1.1.0" />
+    <PackageReference Include="SenseNet.Services.Wopi" Version="1.0.0" />
+    <PackageReference Include="SenseNet.WebHooks" Version="1.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Graylog" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SenseNet.TaskManagement.Core" Version="2.3.0" />
   </ItemGroup>
 
 </Project>
