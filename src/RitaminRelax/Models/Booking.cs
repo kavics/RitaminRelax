@@ -3,7 +3,7 @@
 namespace RitaminRelax.Models;
 
 public enum BookingStatus { Pending, Confirmed, Cancelled }
-public enum BookingPeriod { T30, T60, T90 }
+public enum BookingPeriod { T30, T60 }
 public enum BookingType { Massage1, Massage2, Massage3 }
 
 /// <summary>
@@ -14,7 +14,7 @@ public class Booking
     /// <summary>
     /// Gets or sets the email of the customer
     /// </summary>
-    public string User { get; set; }
+    public string? User { get; set; }
     /// <summary>
     /// Gets or sets the start of booking
     /// </summary>
@@ -26,13 +26,13 @@ public class Booking
     /// <remarks>The <see cref="BookingPeriod"/> value determines the time frame associated with the booking.
     /// This property is serialized as a string when using JSON.</remarks>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public BookingPeriod Period { get; set; }
+    public BookingPeriod? Period { get; set; }
 
     /// <summary>
     /// Gets or sets the type of the booking.
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public BookingType Type { get; set; }
+    public BookingType? Type { get; set; }
 
     /// <summary>
     /// Gets or sets the current status of the booking e.g. Pending, Confirmed, Cancelled.
@@ -40,5 +40,5 @@ public class Booking
     /// <remarks>The status is serialized and deserialized as a string when using JSON, due to the applied
     /// <see cref="JsonStringEnumConverter"/>.</remarks>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public BookingStatus Status { get; set; }
+    public BookingStatus? Status { get; set; }
 }

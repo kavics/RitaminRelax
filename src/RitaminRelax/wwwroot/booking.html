@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Booking Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-btn, .user-name {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .user-name {
+            background-color: #28a745;
+            cursor: default;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+        
+        .error {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .success {
+            color: green;
+            text-align: center;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Booking Management</h1>
+        <button id="loginBtn" class="login-btn" onclick="showLoginModal()">Login</button>
+        <div id="userInfo" class="user-name" style="display: none;"></div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Login</h3>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="hideLoginModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="loading" class="loading">Loading bookings...</div>
+    <div id="success" class="success" style="display: none;"></div>
+    <div id="error" class="error" style="display: none;"></div>
+    <table id="bookingTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Date & Time</th>
+                <th>Period</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="bookingTableBody">
+        </tbody>
+    </table>
+
+    <script>
+        // Global variables for authentication
+        let apiKey = null;
+        let currentUser = null;
+
+        // Function to show login modal
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        // Function to hide login modal
+        function hideLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginForm').reset();
+        }
+
+        // Function to show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Function to show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Function to handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const formData = new FormData();
+                formData.append('userName', username);
+                formData.append('password', password);
+
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Login failed: ${response.status}`);
+                }
+                
+                // Get ApiKey from response headers
+                apiKey = response.headers.get('ApiKey');
+                
+                const loginData = await response.json();
+                currentUser = loginData.userName;
+                
+                // Update UI
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userInfo').textContent = `Welcome, ${currentUser}`;
+                document.getElementById('userInfo').style.display = 'block';
+                
+                hideLoginModal();
+                showSuccess(`Successfully logged in as ${currentUser}`);
+                
+                // Reload bookings with authentication
+                await loadBookings();
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Login failed: ' + error.message);
+            }
+        }
+
+        // Function to format date and time
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        // Function to load bookings from API
+        async function loadBookings() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('bookingTable').style.display = 'none';
+                
+                const headers = {};
+                if (apiKey) {
+                    headers['ApiKey'] = apiKey;
+                }
+                
+                const response = await fetch('/booking', {
+                    headers: headers
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const bookings = await response.json();
+                displayBookings(bookings);
+                
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                document.getElementById('loading').style.display = 'none';
+                showError('Failed to load bookings: ' + error.message);
+            }
+        }
+
+        // Function to display bookings in table
+        function displayBookings(bookings) {
+            const tableBody = document.getElementById('bookingTableBody');
+            const loadingDiv = document.getElementById('loading');
+            const table = document.getElementById('bookingTable');
+            
+            // Clear existing content
+            tableBody.innerHTML = '';
+            
+            // Add each booking as a table row
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${booking.user || 'N/A'}</td>
+                    <td>${formatDateTime(booking.time)}</td>
+                    <td>${booking.period || 'N/A'}</td>
+                    <td>${booking.type || 'N/A'}</td>
+                    <td>${booking.status || 'N/A'}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Show table and hide loading
+            loadingDiv.style.display = 'none';
+            table.style.display = 'table';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add login form submit handler
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('loginModal');
+                if (event.target === modal) {
+                    hideLoginModal();
+                }
+            });
+            
+            // Load bookings when page loads
+            loadBookings();
+        });
+    </script>
+</body>
+</html>

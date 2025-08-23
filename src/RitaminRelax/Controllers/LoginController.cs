@@ -11,12 +11,12 @@ public class LoginResponse
     /// <summary>
     /// Gets or sets the username of the authenticated user
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
     
     /// <summary>
     /// Gets or sets the generated authentication token
     /// </summary>
-    public string Token { get; set; }
+    public required string Token { get; set; }
 }
 
 /// <summary>
@@ -33,13 +33,12 @@ public class LoginController : ControllerBase
     /// <param name="password">The password for authentication</param>
     /// <returns>Login response containing user information and token</returns>
     [HttpPost]
-    public LoginResponse Post(string userName, string password)
+    public LoginResponse Post([FromForm] string userName, [FromForm] string password)
     {
-        //UNDONE: Validate user credentials (BsTools)
-        var token = GetToken(userName);
+        var token = GetToken(userName, password);
         
         // Add token to response headers
-        Response.Headers.Add("ApiKey", token);
+        Response.Headers["ApiKey"] = token;
         
         return new LoginResponse
         {
@@ -53,8 +52,10 @@ public class LoginController : ControllerBase
     /// </summary>
     /// <param name="userName">The username to generate token for</param>
     /// <returns>Base64 encoded token string</returns>
-    private string GetToken(string userName)
+    private string GetToken(string userName, string password)
     {
+        //UNDONE: Validate user credentials (BsTools)
+        //UNDONE: Return error is not authenticated
         //UNDONE: Get apikey for user from database
         return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(userName + "_token"));
     }

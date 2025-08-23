@@ -116,20 +116,7 @@ public class Startup
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo 
-            { 
-                Title = "RitaminRelax API", 
-                Version = "v1",
-                Description = "API for managing bookings and related services"
-            });
-            
-            // Set the comments path for the Swagger JSON and UI
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            c.IncludeXmlComments(xmlPath);
-        });
+        services.AddSwaggerGen();
 
     }
 
@@ -142,6 +129,9 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        // Default static files middleware for wwwroot
+        app.UseStaticFiles();
 
         app.UseRouting();
 
