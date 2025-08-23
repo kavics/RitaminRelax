@@ -60,6 +60,18 @@
             text-align: center;
         }
         
+        .modal-message {
+            color: red;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            display: none;
+            font-size: 14px;
+        }
+        
         .form-group {
             margin-bottom: 15px;
         }
@@ -167,6 +179,7 @@
             <div class="modal-header">
                 <h3>Login</h3>
             </div>
+            <div id="loginMessage" class="modal-message"></div>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -209,12 +222,28 @@
         // Function to show login modal
         function showLoginModal() {
             document.getElementById('loginModal').style.display = 'block';
+            // Clear any previous login messages
+            hideLoginMessage();
         }
 
         // Function to hide login modal
         function hideLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
             document.getElementById('loginForm').reset();
+            hideLoginMessage();
+        }
+
+        // Function to show login message inside modal
+        function showLoginMessage(message) {
+            const messageDiv = document.getElementById('loginMessage');
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+        }
+
+        // Function to hide login message
+        function hideLoginMessage() {
+            const messageDiv = document.getElementById('loginMessage');
+            messageDiv.style.display = 'none';
         }
 
         // Function to show success message
@@ -241,6 +270,9 @@
         async function handleLogin(event) {
             event.preventDefault();
             
+            // Clear any previous login messages
+            hideLoginMessage();
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
@@ -255,7 +287,15 @@
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`Login failed: ${response.status}`);
+                    let errorMessage = 'Login failed';
+                    if (response.status === 401) {
+                        errorMessage = 'Invalid username or password';
+                    } else if (response.status === 500) {
+                        errorMessage = 'Server error occurred';
+                    } else {
+                        errorMessage = `Login failed: ${response.status}`;
+                    }
+                    throw new Error(errorMessage);
                 }
                 
                 // Get ApiKey from response headers
@@ -270,14 +310,13 @@
                 document.getElementById('userInfo').style.display = 'block';
                 
                 hideLoginModal();
-                showSuccess(`Successfully logged in as ${currentUser}`);
                 
                 // Reload bookings with authentication
                 await loadBookings();
                 
             } catch (error) {
                 console.error('Login error:', error);
-                showError('Login failed: ' + error.message);
+                showLoginMessage(error.message);
             }
         }
 
