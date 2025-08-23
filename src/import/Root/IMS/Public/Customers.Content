@@ -1,0 +1,28 @@
+{
+  "ContentType": "OrganizationalUnit",
+  "ContentName": "Customers",
+  "Fields": {
+    "AllowedChildTypes": [
+      "Folder",
+      "User",
+    ]
+  },
+  "Permissions": {
+    "IsInherited": true,
+    "Entries": [
+      {
+        "Identity": "/Root/IMS/Public/RRAdministrators",
+        "LocalOnly": false,
+        "Permissions": {
+          "See": "allow",
+          "Preview": "allow",
+          "PreviewWithoutWatermark": "allow",
+          "PreviewWithoutRedaction": "allow",
+          "Open": "allow",
+          "OpenMinor": "allow",
+          "Save": "allow",
+        }
+      }
+    ]
+  }
+}

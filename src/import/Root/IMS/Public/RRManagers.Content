@@ -1,0 +1,10 @@
+{
+  "ContentType": "Group",
+  "ContentName": "RRManagers",
+  "Fields": {
+    "DisplayName": "RR Managers",
+    "Members": [
+      "/Root/IMS/Public/szrita"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "ContentType": "Group",
+  "ContentName": "Administrators",
+  "Fields": {
+    "DisplayName": "Administrators",
+    "Members": [
+      "/Root/IMS/BuiltIn/Portal/Admin",
+      "/Root/IMS/BuiltIn/Portal/Developers",
+      "/Root/IMS/Public/edavid"
+    ],
+    "Index": 2
+  }
+}

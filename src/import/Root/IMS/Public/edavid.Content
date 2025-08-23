@@ -1,0 +1,15 @@
+{
+  "ContentType": "User",
+  "ContentName": "edavid",
+  "Fields": {
+    "LoginName": "edavid",
+    "DisplayName": "edavid",
+    "Enabled": true,
+    "Email": "edavid@gmail.com",
+    "FullName": "edavid",
+    "Password": {
+      "Hash": "$2a$10$cKSa536EbIPQhw569HdlvO5CsFWsAq0uSOejao3efkoorckvOQnxe"
+    },
+    "CreationDate": "2025-08-23T01:22:51.65Z",
+  }
+}

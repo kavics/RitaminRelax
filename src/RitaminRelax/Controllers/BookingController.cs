@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RitaminRelax.Models;
 using SenseNet.Configuration;
+using SenseNet.ContentRepository.Storage.Security;
 using SNCR = SenseNet.ContentRepository;
 
 namespace RitaminRelax.Controllers;
@@ -26,30 +27,44 @@ public class BookingController : ControllerBase
         {
             return
             [
+                new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
+                new Booking { Time = DateTime.Today.AddDays(2).AddHours(16) },
+                new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
+            ];
+        }
+        
+        using var _ = new SystemAccount();
+
+        if (user.IsInGroup(Identifiers.AdministratorsGroupId) || user.IsInGroup(RRTools.RRManagers))
+        {
+            return
+            [
                 new Booking
                 {
+                    User = "TestUser1",
                     Time = DateTime.Today.AddDays(1).AddHours(16),
+                    Period = BookingPeriod.T60,
+                    Type = BookingType.Massage1
                 },
                 new Booking
                 {
+                    User = "TestUser2",
                     Time = DateTime.Today.AddDays(2).AddHours(16),
+                    Period = BookingPeriod.T30,
+                    Type = BookingType.Massage2
                 },
                 new Booking
                 {
+                    User = "TestUser3",
                     Time = DateTime.Today.AddDays(2).AddHours(17),
+                    Period = BookingPeriod.T60,
+                    Type = BookingType.Massage3
                 }
             ];
         }
-
         return
         [
-            new Booking
-            {
-                User = "TestUser1",
-                Time = DateTime.Today.AddDays(1).AddHours(16),
-                Period = BookingPeriod.T60,
-                Type = BookingType.Massage1
-            },
+            new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
             new Booking
             {
                 User = "TestUser2",
@@ -57,13 +72,7 @@ public class BookingController : ControllerBase
                 Period = BookingPeriod.T30,
                 Type = BookingType.Massage2
             },
-            new Booking
-            {
-                User = "TestUser3",
-                Time = DateTime.Today.AddDays(2).AddHours(17),
-                Period = BookingPeriod.T60,
-                Type = BookingType.Massage3
-            }
+            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
         ];
     }
 

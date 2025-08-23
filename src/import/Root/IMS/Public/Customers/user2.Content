@@ -1,0 +1,15 @@
+{
+  "ContentType": "User",
+  "ContentName": "user2",
+  "Fields": {
+    "LoginName": "user2",
+    "DisplayName": "user2",
+    "Enabled": true,
+    "Email": "user2@server.com",
+    "FullName": "user2",
+    "Password": {
+      "Text": "user2"
+    },
+    "CreationDate": "2000-01-01T01:23:45.67Z",
+  }
+}
