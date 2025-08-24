@@ -164,6 +164,27 @@
             border-radius: 4px;
             margin-bottom: 10px;
         }
+
+        .accepted-icon {
+            font-size: 16px;
+            text-align: center;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+        
+        .accepted-true {
+            color: #28a745;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+        }
+        
+        .accepted-false {
+            color: #8B4513 !important;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -207,7 +228,7 @@
                 <th>Date & Time</th>
                 <th>Period</th>
                 <th>Type</th>
-                <th>Status</th>
+                <th>Accepted</th>
             </tr>
         </thead>
         <tbody id="bookingTableBody">
@@ -320,10 +341,29 @@
             }
         }
 
-        // Function to format date and time
+        // Function to format accepted status as icon
+        function formatAccepted(accepted) {
+            if (accepted === true) {
+                return '<span class="accepted-icon accepted-true">✓</span>';
+            } else {
+                return '<span class="accepted-icon accepted-false">?</span>';
+            }
+        }
+
+        // Function to format date and time with Hungarian weekday after format
         function formatDateTime(dateTimeString) {
             const date = new Date(dateTimeString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            
+            // Hungarian weekday names
+            const weekdays = ['vasárnap', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat'];
+            const weekday = weekdays[date.getDay()];
+            
+            return `${year}-${month}-${day} ${hours}:${minutes} ${weekday}`;
         }
 
         // Function to load bookings from API
@@ -373,7 +413,7 @@
                     <td>${formatDateTime(booking.time)}</td>
                     <td>${booking.period || 'N/A'}</td>
                     <td>${booking.type || 'N/A'}</td>
-                    <td>${booking.status || 'N/A'}</td>
+                    <td>${formatAccepted(booking.accepted)}</td>
                 `;
                 
                 tableBody.appendChild(row);
