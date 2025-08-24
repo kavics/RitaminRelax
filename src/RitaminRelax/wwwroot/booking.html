@@ -203,7 +203,7 @@
     <table id="bookingTable" style="display: none;">
         <thead>
             <tr>
-                <th>User</th>
+                <th>Customer</th>
                 <th>Date & Time</th>
                 <th>Period</th>
                 <th>Type</th>
@@ -369,7 +369,7 @@
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
-                    <td>${booking.user || 'N/A'}</td>
+                    <td>${booking.customer || 'N/A'}</td>
                     <td>${formatDateTime(booking.time)}</td>
                     <td>${booking.period || 'N/A'}</td>
                     <td>${booking.type || 'N/A'}</td>
