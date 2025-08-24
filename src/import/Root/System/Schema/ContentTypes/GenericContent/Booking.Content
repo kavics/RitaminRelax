@@ -1,0 +1,15 @@
+{
+  "ContentType": "ContentType",
+  "ContentName": "Booking",
+  "Fields": {
+    "Categories": "",
+    "IsSystemType": false,
+    "HandlerName": "RitaminRelax.ContentHandlers.Booking",
+    "ParentTypeName": "GenericContent",
+    "DisplayName": "Foglalás",
+    "Description": "Az ügyfél által rögzített foglalás.",
+    "Binary": {
+      "Attachment": "Booking.xml"
+    }
+  }
+}

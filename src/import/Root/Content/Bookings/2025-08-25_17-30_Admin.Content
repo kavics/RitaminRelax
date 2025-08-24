@@ -1,0 +1,12 @@
+{
+  "ContentType": "Booking",
+  "ContentName": "2025-08-25_17-30_Admin",
+  "Fields": {
+    "Customer": "/Root/IMS/BuiltIn/Portal/Admin",
+    "BookingTime": "2025-08-25T17:30:00Z",
+    "BookingPeriod": 60,
+    "BookingType": "Gyúrj meg",
+    "Accepted": true,
+    "AllowedChildTypes": []
+  }
+}

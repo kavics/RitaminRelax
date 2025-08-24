@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RitaminRelax.Models;
 using SenseNet.BusinessSolutions.Common;
 using SenseNet.ContentRepository.Security.ApiKeys;
 using SenseNet.ContentRepository.Storage.Security;

@@ -1,0 +1,104 @@
+{
+  "ContentType": "Workspace",
+  "ContentName": "Content",
+  "Fields": {
+    "Manager": [],
+    "Deadline": "0001-01-01T00:00:00Z",
+    "IsActive": true,
+    "IsCritical": false,
+    "IsWallContainer": false,
+    "IsFollowed": false,
+    "AllowedChildTypes": [
+      "Folder",
+      "DocumentLibrary",
+      "ImageLibrary",
+      "EventList",
+      "MemoList",
+      "LinkList",
+      "TaskList",
+      "CustomList",
+      "Workspace",
+      "SystemFolder",
+      "File",
+      "Image",
+      "Settings",
+      "Booking"
+    ]
+  },
+  "Permissions": {
+    "IsInherited": false,
+    "Entries": [
+      {
+        "Identity": "/Root/IMS/BuiltIn/Portal/Administrators",
+        "LocalOnly": false,
+        "Permissions": {
+          "See": "allow",
+          "Preview": "allow",
+          "PreviewWithoutWatermark": "allow",
+          "PreviewWithoutRedaction": "allow",
+          "Open": "allow",
+          "OpenMinor": "allow",
+          "Save": "allow",
+          "Publish": "allow",
+          "ForceCheckin": "allow",
+          "AddNew": "allow",
+          "Approve": "allow",
+          "Delete": "allow",
+          "RecallOldVersion": "allow",
+          "DeleteOldVersion": "allow",
+          "SeePermissions": "allow",
+          "SetPermissions": "allow",
+          "RunApplication": "allow",
+          "ManageListsAndWorkspaces": "allow",
+          "TakeOwnership": "allow"
+        }
+      },
+      {
+        "Identity": "/Root/IMS/BuiltIn/Portal/Everyone",
+        "LocalOnly": true,
+        "Permissions": {
+          "See": "allow",
+          "Preview": "allow",
+          "PreviewWithoutWatermark": "allow",
+          "PreviewWithoutRedaction": "allow",
+          "Open": "allow"
+        }
+      },
+      {
+        "Identity": "/Root/IMS/Public/Administrators",
+        "LocalOnly": false,
+        "Permissions": {
+          "See": "allow",
+          "Preview": "allow",
+          "PreviewWithoutWatermark": "allow",
+          "PreviewWithoutRedaction": "allow",
+          "Open": "allow",
+          "OpenMinor": "allow",
+          "Save": "allow",
+          "Publish": "allow",
+          "ForceCheckin": "allow",
+          "AddNew": "allow",
+          "Approve": "allow",
+          "Delete": "allow",
+          "RecallOldVersion": "allow",
+          "DeleteOldVersion": "allow",
+          "SeePermissions": "allow",
+          "SetPermissions": "allow",
+          "RunApplication": "allow",
+          "ManageListsAndWorkspaces": "allow",
+          "TakeOwnership": "allow"
+        }
+      },
+      {
+        "Identity": "/Root/IMS/Public/Administrators",
+        "LocalOnly": true,
+        "Permissions": {
+          "Save": "deny",
+          "Delete": "deny",
+          "SetPermissions": "deny",
+          "ManageListsAndWorkspaces": "deny"
+        }
+      }
+    ]
+  }
+}

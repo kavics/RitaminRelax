@@ -3,13 +3,13 @@
   "ContentName": "edavid",
   "Fields": {
     "LoginName": "edavid",
-    "DisplayName": "edavid",
     "Enabled": true,
     "Email": "e.david.hu@gmail.com",
     "FullName": "edavid",
     "Password": {
       "Hash": "$2a$10$cKSa536EbIPQhw569HdlvO5CsFWsAq0uSOejao3efkoorckvOQnxe"
     },
-    "CreationDate": "2025-08-23T01:22:51.65Z",
+    "ProfilePath": "/Root/Profiles/Public/edavid",
+    "CreationDate": "2025-08-23T01:22:51.65Z"
   }
 }

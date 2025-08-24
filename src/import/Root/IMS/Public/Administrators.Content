@@ -1,0 +1,22 @@
+{
+  "ContentType": "Group",
+  "ContentName": "Administrators",
+  "Fields": {
+    "Members": [
+      "/Root/IMS/BuiltIn/Portal/PublicAdmin"
+    ],
+    "LastSync": "0001-01-01T00:00:00Z",
+    "Description": "Members of this group have full access to the non-system parts of the repository.",
+    "AllRoles": [
+      "/Root/IMS/BuiltIn/Portal/AIVisionUsers",
+      "/Root/IMS/BuiltIn/Portal/AITextUsers",
+      "/Root/IMS/BuiltIn/Portal/AdminUIViewers"
+    ],
+    "DirectRoles": [
+      "/Root/IMS/BuiltIn/Portal/AIVisionUsers",
+      "/Root/IMS/BuiltIn/Portal/AITextUsers",
+      "/Root/IMS/BuiltIn/Portal/AdminUIViewers"
+    ],
+    "AllowedChildTypes": []
+  }
+}

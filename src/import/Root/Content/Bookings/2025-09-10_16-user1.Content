@@ -1,0 +1,11 @@
+{
+  "ContentType": "Booking",
+  "ContentName": "2025-09-10_16-user1",
+  "Fields": {
+    //"Customer": "/Root/IMS/Public/Customers/user1",
+    //"BookingTime": "2025-09-10T16:00:00",
+    //"BookingPeriod": "60",
+    //"BookingType": "Massage1",
+    //"Accepted": true
+  }
+}

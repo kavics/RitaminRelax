@@ -3,13 +3,13 @@
   "ContentName": "szrita",
   "Fields": {
     "LoginName": "szrita",
-    "DisplayName": "szrita",
     "Enabled": true,
     "Email": "szrita@gmail.com",
     "FullName": "szrita",
     "Password": {
       "Hash": "$2a$10$cKSa536EbIPQhw569HdlvO5CsFWsAq0uSOejao3efkoorckvOQnxe"
     },
-    "CreationDate": "2025-08-23T01:22:51.65Z",
+    "ProfilePath": "/Root/Profiles/Public/szrita",
+    "CreationDate": "2025-08-23T01:22:51.65Z"
   }
 }

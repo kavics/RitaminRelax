@@ -1,0 +1,9 @@
+{
+  "ContentType": "Group",
+  "ContentName": "Developers",
+  "Fields": {
+    "Members": [
+      "/Root/IMS/Public/edavid"
+    ]
+  }
+}

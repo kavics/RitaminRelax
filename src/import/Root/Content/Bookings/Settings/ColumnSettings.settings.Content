@@ -1,0 +1,12 @@
+{
+  "ContentType": "Settings",
+  "ContentName": "ColumnSettings.settings",
+  "Fields": {
+    "GlobalOnly": false,
+    "Binary": {
+      "Attachment": "ColumnSettings.settings"
+    },
+    "PageCount": -4,
+    "AllowedChildTypes": []
+  }
+}

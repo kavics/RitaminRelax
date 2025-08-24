@@ -1,10 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RitaminRelax.Models;
+using RitaminRelax.ContentHandlers;
 using SenseNet.Configuration;
 using SenseNet.ContentRepository.Storage.Security;
 using SNCR = SenseNet.ContentRepository;
 
 namespace RitaminRelax.Controllers;
+
+public class BookingRequest
+{
+    public DateTime time { get; set; }
+    public int period { get; set; }
+    public string type { get; set; }
+}
 
 /// <summary>
 /// Controller for managing booking operations
@@ -19,81 +26,59 @@ public class BookingController : ControllerBase
     /// Gets a list of test bookings
     /// </summary>
     /// <returns>A collection of test booking objects</returns>
-    [HttpGet(Name = "Test")]
+    [HttpGet]
     public IEnumerable<Booking> Get()
     {
         var user = SNCR.User.Current;
+
         if(user == null || user.Id == Identifiers.VisitorUserId)
         {
-            return
-            [
-                new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
-                new Booking { Time = DateTime.Today.AddDays(2).AddHours(16) },
-                new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
-            ];
+            return Array.Empty<Booking>();
         }
-        
+
         using var _ = new SystemAccount();
 
         if (user.IsInGroup(Identifiers.AdministratorsGroupId) || user.IsInGroup(RRTools.RRManagers))
         {
-            return
-            [
-                new Booking
-                {
-                    User = "TestUser1",
-                    Time = DateTime.Today.AddDays(1).AddHours(16),
-                    Period = BookingPeriod.T60,
-                    Type = BookingType.Massage1
-                },
-                new Booking
-                {
-                    User = "TestUser2",
-                    Time = DateTime.Today.AddDays(2).AddHours(16),
-                    Period = BookingPeriod.T30,
-                    Type = BookingType.Massage2
-                },
-                new Booking
-                {
-                    User = "TestUser3",
-                    Time = DateTime.Today.AddDays(2).AddHours(17),
-                    Period = BookingPeriod.T60,
-                    Type = BookingType.Massage3
-                }
-            ];
+            return Array.Empty<Booking>();
         }
-        return
-        [
-            new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
-            new Booking
-            {
-                User = "TestUser2",
-                Time = DateTime.Today.AddDays(2).AddHours(16),
-                Period = BookingPeriod.T30,
-                Type = BookingType.Massage2
-            },
-            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
-        ];
+        
+        return Array.Empty<Booking>();
     }
 
     /// <summary>
-    /// Gets 2 random bookings for demo purposes
+    /// Creates a new booking
     /// </summary>
-    /// <returns>A collection of 2 randomly generated booking objects</returns>
-    [HttpGet("random")]
-    public IEnumerable<Booking> GetRandomBookings()
+    /// <param name="request">Booking request data</param>
+    /// <returns>Action result indicating success or failure</returns>
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] BookingRequest request)
     {
-        var periods = Enum.GetValues<BookingPeriod>();
-        var types = Enum.GetValues<BookingType>();
-        var statuses = Enum.GetValues<BookingStatus>();
-        
-        return Enumerable.Range(0, 2).Select(_ => new Booking
+        var user = (SNCR.User)SNCR.User.Current;
+        if(user.Id == Identifiers.VisitorUserId)
         {
-            User = $"DemoUser{_random.Next(1, 100)}",
-            Time = DateTime.Today.AddDays(_random.Next(1, 30)).AddHours(_random.Next(8, 20)),
-            Period = periods[_random.Next(periods.Length)],
-            Type = types[_random.Next(types.Length)],
-            Status = statuses[_random.Next(statuses.Length)]
-        });
+            return Forbid("Authentication required");
+        }
+
+        try
+        {
+            using var _ = new SystemAccount();
+
+            var booking = new Booking(RRTools.BookingContainer);
+            booking.Name = $"{request.time:yyyy-MM-dd_HH-mm}_{AccessProvider.Current.GetOriginalUser()}";
+            booking.Customer = user;
+            booking.BookingTime = request.time;
+            booking.BookingPeriod = request.period;
+            booking.BookingType = request.type;
+            booking.Accepted = false;
+
+            await booking.SaveAsync(HttpContext.RequestAborted);
+            
+            return Ok("Booking created successfully");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error creating booking: {ex.Message}");
+        }
     }
 }

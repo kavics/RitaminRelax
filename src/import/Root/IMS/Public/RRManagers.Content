@@ -5,6 +5,10 @@
     "DisplayName": "RR Managers",
     "Members": [
       "/Root/IMS/Public/szrita"
-    ]
+    ],
+    "LastSync": "0001-01-01T00:00:00Z",
+    "AllRoles": [],
+    "DirectRoles": [],
+    "AllowedChildTypes": []
   }
 }

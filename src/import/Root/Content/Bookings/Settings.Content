@@ -1,0 +1,7 @@
+{
+  "ContentType": "SystemFolder",
+  "ContentName": "Settings",
+  "Fields": {
+    "AllowedChildTypes": []
+  }
+}

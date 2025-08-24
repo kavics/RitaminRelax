@@ -3,13 +3,13 @@
   "ContentName": "user2",
   "Fields": {
     "LoginName": "user2",
-    "DisplayName": "user2",
     "Enabled": true,
     "Email": "user2@server.com",
     "FullName": "user2",
     "Password": {
-      "Text": "user2"
+      "Hash": "$2a$10$TO9KzE3N7oBzP6jCkUwOYuPZr4gLWJ.NOjT.Hym/0nYPI9TYN9u5m"
     },
-    "CreationDate": "2000-01-01T01:23:45.67Z",
+    "ProfilePath": "/Root/Profiles/Public/user2",
+    "CreationDate": "2000-01-01T01:23:45.67Z"
   }
 }

@@ -1,0 +1,85 @@
+﻿<ContentType name="Booking" parentType="GenericContent" handler="RitaminRelax.ContentHandlers.Booking" xmlns="http://schemas.sensenet.com/SenseNet/ContentRepository/ContentTypeDefinition">
+  <DisplayName>Foglalás</DisplayName>
+  <Description>Az ügyfél által rögzített foglalás.</Description>
+  <Fields>
+    <Field name="Customer" type="Reference">
+      <DisplayName>Ügyfél</DisplayName>
+      <Description>A személy, aki lefoglalta a szolgáltatást.</Description>
+      <Configuration>
+        <AllowMultiple>false</AllowMultiple>
+        <AllowedTypes>
+          <Type>User</Type>
+        </AllowedTypes>
+        <SelectionRoot>
+          <Path>/Root/IMS/Public/Customers</Path>
+        </SelectionRoot>
+        <VisibleBrowse>Show</VisibleBrowse>
+        <VisibleEdit>Show</VisibleEdit>
+        <VisibleNew>Show</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="BookingTime" type="DateTime">
+      <DisplayName>A foglalás ideje.</DisplayName>
+      <Description>A foglalás kezdetének időpontja.</Description>
+      <Configuration>
+        <DateTimeMode>DateAndTime</DateTimeMode>
+        <VisibleBrowse>Show</VisibleBrowse>
+        <VisibleEdit>Show</VisibleEdit>
+        <VisibleNew>Show</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="BookingPeriod" type="Integer">
+      <DisplayName>A foglalás hossza</DisplayName>
+      <Description>A foglalás hossza percekben.</Description>
+      <Configuration>
+        <MinValue>30</MinValue>
+        <MaxValue>90</MaxValue>
+        <VisibleBrowse>Show</VisibleBrowse>
+        <VisibleEdit>Show</VisibleEdit>
+        <VisibleNew>Show</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="BookingType" type="ShortText">
+      <DisplayName>A foglalás típusa</DisplayName>
+      <Description>A foglalásban szereplő szolgáltatás megnevezése.</Description>
+      <Configuration>
+        <VisibleBrowse>Show</VisibleBrowse>
+        <VisibleEdit>Show</VisibleEdit>
+        <VisibleNew>Show</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="Accepted" type="Boolean">
+      <DisplayName>A foglalás elfogadva.</DisplayName>
+      <Description>Ha a foglalás nem "accepted", akkor várakozik.</Description>
+      <Configuration>
+        <VisibleBrowse>Show</VisibleBrowse>
+        <VisibleEdit>Show</VisibleEdit>
+        <VisibleNew>Show</VisibleNew>
+      </Configuration>
+    </Field>
+
+    <!--  -->
+
+    <Field name="DisplayName" type="ShortText">
+      <Configuration>
+        <VisibleBrowse>Hide</VisibleBrowse>
+        <VisibleEdit>Hide</VisibleEdit>
+        <VisibleNew>Hide</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="Index" type="Integer">
+      <Configuration>
+        <VisibleBrowse>Advanced</VisibleBrowse>
+        <VisibleEdit>Advanced</VisibleEdit>
+        <VisibleNew>Advanced</VisibleNew>
+      </Configuration>
+    </Field>
+    <Field name="Version" type="Version">
+      <Configuration>
+        <VisibleBrowse>Hide</VisibleBrowse>
+        <VisibleEdit>Hide</VisibleEdit>
+        <VisibleNew>Hide</VisibleNew>
+      </Configuration>
+    </Field>
+  </Fields>
+</ContentType>

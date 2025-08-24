@@ -1,0 +1,12 @@
+{
+  "ContentType": "Booking",
+  "ContentName": "2025-08-25_09-00_user1",
+  "Fields": {
+    "Customer": "/Root/IMS/Public/Customers/user1",
+    "BookingTime": "2025-08-25T09:00:00Z",
+    "BookingPeriod": 30,
+    "BookingType": "Masszázs-1",
+    "Accepted": false,
+    "AllowedChildTypes": []
+  }
+}
