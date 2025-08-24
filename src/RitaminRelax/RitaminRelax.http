@@ -1,10 +1,23 @@
 @host=https://localhost:7071
 @admin=CHWZZpHheIb5arl5uQRdSWqlOhqFuVJVqZLXVJGMjRjmBpDocnQFMN831GDUcoFdNNqsLvyvMPhMfgTnhZf
+@manager=nAqoDyI0cklkZvMsaVGjcy6ravRSZGLgHqC49xcfAvToZ3rtgpMdlKjwoVPkh9RT3fBvJcU7md6tYKYM8kp
 @user1=9nptmxiQXQAruA7fvMiAvreQ5aPci4d2FlRjd9WaScZogvznQRZGTjWQ0uB8FInsHs1zLP3N52IM6MbgvTW
 @user2=9xxJM9FBeSRdyo4ajwKMx49vn15i7Efyfvao39ieRdbN0mWcxCd17FGUPlFdNaQDFe3aMEkCGSVbFt87HIz
 
 ###
 GET {{host}}/booking
+###
+GET {{host}}/booking
+ApiKey:{{admin}}
+###
+GET {{host}}/booking
+ApiKey:{{manager}}
+###
+GET {{host}}/booking
+ApiKey:{{user1}}
+###
+GET {{host}}/booking
+ApiKey:{{user2}}
 
 ###
 POST {{host}}/booking
@@ -16,3 +29,24 @@ ApiKey:{{user2}}
   "period": 30,
   "type": "Masszázs-1"
 }
+
+###
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+userName=admin&password=admin
+###
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+userName=szrita&password=szrita
+###
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+userName=user1&password=user1
+###
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+userName=user2&password=user2

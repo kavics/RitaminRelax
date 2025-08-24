@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RitaminRelax.ContentHandlers;
 using SenseNet.Configuration;
+using SenseNet.ContentRepository;
 using SenseNet.ContentRepository.Storage.Security;
 using SNCR = SenseNet.ContentRepository;
 
@@ -11,6 +12,14 @@ public class BookingRequest
     public DateTime time { get; set; }
     public int period { get; set; }
     public string type { get; set; }
+}
+public class BookingResponse
+{
+    public string? Customer { get;set; }
+    public DateTime Time { get; set; }
+    public int? Period { get; set; }
+    public string? Type { get; set; }
+    public bool Accepted { get; set; }
 }
 
 /// <summary>
@@ -27,23 +36,41 @@ public class BookingController : ControllerBase
     /// </summary>
     /// <returns>A collection of test booking objects</returns>
     [HttpGet]
-    public IEnumerable<Booking> Get()
+    public IEnumerable<BookingResponse> Get()
     {
         var user = SNCR.User.Current;
 
-        if(user == null || user.Id == Identifiers.VisitorUserId)
-        {
-            return Array.Empty<Booking>();
-        }
-
         using var _ = new SystemAccount();
 
+        if(user == null || user.Id == Identifiers.VisitorUserId)
+            return GetBookings(null, false);
         if (user.IsInGroup(Identifiers.AdministratorsGroupId) || user.IsInGroup(RRTools.RRManagers))
-        {
-            return Array.Empty<Booking>();
-        }
-        
-        return Array.Empty<Booking>();
+            return GetBookings(null, true);
+        return GetBookings(user, false);
+    }
+
+    private IEnumerable<BookingResponse> GetBookings(IUser? user, bool isAdmin)
+    {
+        var bookings = SNCR.Content.All
+            .Where(c => c.TypeIs(nameof(Booking)))
+            .ToArray();
+
+        var result = bookings
+            .Select(c => (Booking)c.ContentHandler)
+            .Select(b =>
+            {
+                var r = new BookingResponse { Time = b.BookingTime, Accepted = b.Accepted };
+                if (isAdmin || (user != null && b.Customer.Id == user.Id))
+                {
+                    r.Customer = b.Customer.Email;
+                    r.Period = b.BookingPeriod;
+                    r.Type = b.BookingType;
+                }
+                return r;
+            })
+            .ToArray();
+
+        return result;
     }
 
     /// <summary>
