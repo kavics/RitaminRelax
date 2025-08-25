@@ -28,4 +28,4 @@ jobs:
        context: src
        file: src/RitaminRelax/Dockerfile
        push: true
-       tags: kavics/RitaminRelax:latest
+       tags: kavics/ritamin-relax:latest
