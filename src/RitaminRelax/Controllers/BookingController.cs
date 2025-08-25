@@ -92,7 +92,7 @@ public class BookingController : ControllerBase
             using var _ = new SystemAccount();
 
             var booking = new Booking(RRTools.BookingContainer);
-            booking.Name = $"{request.time:yyyy-MM-dd_HH-mm}_{AccessProvider.Current.GetOriginalUser()}";
+            booking.Name = $"{request.time:yyyy-MM-dd_HH-mm}_{AccessProvider.Current.GetOriginalUser().Name}";
             booking.Customer = user;
             booking.BookingTime = request.time;
             booking.BookingPeriod = request.period;
