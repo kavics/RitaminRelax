@@ -7,20 +7,115 @@ using SNCR = SenseNet.ContentRepository;
 namespace RitaminRelax.Controllers;
 
 /// <summary>
-/// Controller for managing booking operations
+/// MVC Controller for managing booking operations
 /// </summary>
-[ApiController]
-[Route("[controller]")]
-public class BookingController : ControllerBase
+public class BookingController : Controller
 {
     private readonly Random _random = new();
 
     /// <summary>
-    /// Gets a list of test bookings
+    /// Index page showing calendar view for booking
     /// </summary>
-    /// <returns>A collection of test booking objects</returns>
-    [HttpGet(Name = "Test")]
-    public IEnumerable<Booking> Get()
+    /// <returns>Calendar view for the current month</returns>
+    public IActionResult Index()
+    {
+        var currentDate = DateTime.Today;
+        return View(currentDate);
+    }
+
+    /// <summary>
+    /// Bookings list page
+    /// </summary>
+    /// <returns>View with list of bookings</returns>
+    public IActionResult List()
+    {
+        var bookings = GetBookings();
+        return View(bookings);
+    }
+
+    /// <summary>
+    /// Details page for a specific booking
+    /// </summary>
+    /// <param name="id">Booking index</param>
+    /// <returns>Details view for the booking</returns>
+    public IActionResult Details(int id)
+    {
+        var bookings = GetBookings().ToList();
+        if (id < 0 || id >= bookings.Count)
+        {
+            return NotFound();
+        }
+        
+        return View(bookings[id]);
+    }
+
+    /// <summary>
+    /// Create new booking form
+    /// </summary>
+    /// <returns>Create view with empty booking model</returns>
+    public IActionResult Create()
+    {
+        var booking = new Booking 
+        { 
+            Time = DateTime.Today.AddDays(1).AddHours(16),
+            Status = BookingStatus.Pending
+        };
+        return View(booking);
+    }
+
+    /// <summary>
+    /// Create new booking - POST action
+    /// </summary>
+    /// <param name="booking">Booking to create</param>
+    /// <returns>Redirect to index or return to create view with errors</returns>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Booking booking)
+    {
+        if (ModelState.IsValid)
+        {
+            // In a real application, save to database here
+            TempData["SuccessMessage"] = "Booking created successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+        return View(booking);
+    }
+
+    /// <summary>
+    /// Random bookings page for demo purposes
+    /// </summary>
+    /// <returns>View with randomly generated bookings</returns>
+    public IActionResult Random()
+    {
+        var bookings = GetRandomBookings();
+        return View(bookings);
+    }
+
+    /// <summary>
+    /// API endpoint to get bookings (legacy support)
+    /// </summary>
+    /// <returns>JSON array of bookings</returns>
+    [HttpGet]
+    [Route("api/[controller]")]
+    public IActionResult GetBookingsApi()
+    {
+        var bookings = GetBookings();
+        return Json(bookings);
+    }
+
+    /// <summary>
+    /// API endpoint to get random bookings (legacy support)
+    /// </summary>
+    /// <returns>JSON array of random bookings</returns>
+    [HttpGet]
+    [Route("api/[controller]/random")]
+    public IActionResult GetRandomBookingsApi()
+    {
+        var bookings = GetRandomBookings();
+        return Json(bookings);
+    }
+
+    private IEnumerable<Booking> GetBookings()
     {
         var user = SNCR.User.Current;
         if(user == null || user.Id == Identifiers.VisitorUserId)
@@ -44,50 +139,49 @@ public class BookingController : ControllerBase
                     User = "TestUser1",
                     Time = DateTime.Today.AddDays(1).AddHours(16),
                     Period = BookingPeriod.T60,
-                    Type = BookingType.Massage1
+                    Type = BookingType.Massage1,
+                    Status = BookingStatus.Confirmed
                 },
                 new Booking
                 {
                     User = "TestUser2",
                     Time = DateTime.Today.AddDays(2).AddHours(16),
                     Period = BookingPeriod.T30,
-                    Type = BookingType.Massage2
+                    Type = BookingType.Massage2,
+                    Status = BookingStatus.Pending
                 },
                 new Booking
                 {
                     User = "TestUser3",
                     Time = DateTime.Today.AddDays(2).AddHours(17),
                     Period = BookingPeriod.T60,
-                    Type = BookingType.Massage3
+                    Type = BookingType.Massage3,
+                    Status = BookingStatus.Confirmed
                 }
             ];
         }
         return
         [
-            new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
+            new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), Status = BookingStatus.Pending },
             new Booking
             {
                 User = "TestUser2",
                 Time = DateTime.Today.AddDays(2).AddHours(16),
                 Period = BookingPeriod.T30,
-                Type = BookingType.Massage2
+                Type = BookingType.Massage2,
+                Status = BookingStatus.Confirmed
             },
-            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
+            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), Status = BookingStatus.Pending }
         ];
     }
 
-    /// <summary>
-    /// Gets 2 random bookings for demo purposes
-    /// </summary>
-    /// <returns>A collection of 2 randomly generated booking objects</returns>
-    [HttpGet("random")]
-    public IEnumerable<Booking> GetRandomBookings()
+    private IEnumerable<Booking> GetRandomBookings()
     {
         var periods = Enum.GetValues<BookingPeriod>();
         var types = Enum.GetValues<BookingType>();
         var statuses = Enum.GetValues<BookingStatus>();
         
-        return Enumerable.Range(0, 2).Select(_ => new Booking
+        return Enumerable.Range(0, 2).Select(i => new Booking
         {
             User = $"DemoUser{_random.Next(1, 100)}",
             Time = DateTime.Today.AddDays(_random.Next(1, 30)).AddHours(_random.Next(8, 20)),

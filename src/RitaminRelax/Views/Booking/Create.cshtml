@@ -1,0 +1,104 @@
+@model Booking
+@{
+    ViewData["Title"] = "Új foglalás";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>@ViewData["Title"]</h1>
+        
+        <form asp-action="Create" method="post">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Foglalás adatai</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="User" class="form-label">Felhasználó neve</label>
+                                <input asp-for="User" class="form-control" placeholder="Add meg a neved" />
+                                <span asp-validation-for="User" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Time" class="form-label">Foglalás idõpontja</label>
+                                <input asp-for="Time" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="Time" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Period" class="form-label">Idõtartam</label>
+                                <select asp-for="Period" class="form-select">
+                                    <option value="">Válassz idõtartamot</option>
+                                    <option value="@BookingPeriod.T30">30 perc</option>
+                                    <option value="@BookingPeriod.T60">60 perc</option>
+                                </select>
+                                <span asp-validation-for="Period" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Type" class="form-label">Masszázs típusa</label>
+                                <select asp-for="Type" class="form-select">
+                                    <option value="">Válassz típust</option>
+                                    <option value="@BookingType.Massage1">Relaxációs masszázs</option>
+                                    <option value="@BookingType.Massage2">Svéd masszázs</option>
+                                    <option value="@BookingType.Massage3">Gyógymasszázs</option>
+                                </select>
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Állapot</label>
+                        <div class="form-control-plaintext">
+                            <span class="badge bg-warning text-dark">Függõben</span>
+                            <small class="text-muted ms-2">Az új foglalások automatikusan függõben állapotra kerülnek</small>
+                        </div>
+                        <input asp-for="Status" type="hidden" value="@BookingStatus.Pending" />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Foglalás létrehozása</button>
+                    <a asp-action="Index" class="btn btn-secondary">Mégse</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Foglalási információk</h6>
+            </div>
+            <div class="card-body">
+                <h6>Árak:</h6>
+                <ul class="list-unstyled">
+                    <li><strong>30 perces kezelés:</strong> 8.000 Ft</li>
+                    <li><strong>60 perces kezelés:</strong> 12.000 Ft</li>
+                </ul>
+                
+                <h6 class="mt-3">Kezelési típusok:</h6>
+                <ul class="list-unstyled">
+                    <li><span class="badge bg-info me-1">Relaxációs</span> Stresszoldó, pihentetõ</li>
+                    <li><span class="badge bg-success me-1">Svéd</span> Klasszikus, erõs nyomás</li>
+                    <li><span class="badge bg-warning me-1">Gyógy</span> Terápiás, célzott</li>
+                </ul>
+                
+                <div class="alert alert-info mt-3">
+                    <small><strong>Figyelem:</strong> A foglalás leadása után 24 órán belül visszaigazolást küldünk.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

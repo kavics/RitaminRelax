@@ -1,0 +1,110 @@
+@model Booking
+@{
+    ViewData["Title"] = "Foglalás részletei";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>@ViewData["Title"]</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Foglalás információk</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Felhasználó:</dt>
+                    <dd class="col-sm-9">@(Model.User ?? "Vendég")</dd>
+
+                    <dt class="col-sm-3">Idõpont:</dt>
+                    <dd class="col-sm-9">
+                        <strong>@Model.Time.ToString("yyyy. MMMM dd. (dddd) HH:mm")</strong>
+                    </dd>
+
+                    <dt class="col-sm-3">Idõtartam:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Period.HasValue)
+                        {
+                            @(Model.Period == BookingPeriod.T30 ? "30 perc" : "60 perc")
+                        }
+                        else
+                        {
+                            <span class="text-muted">Nincs megadva</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Masszázs típusa:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Type.HasValue)
+                        {
+                            switch (Model.Type)
+                            {
+                                case BookingType.Massage1:
+                                    <span class="badge bg-info fs-6">Relaxációs masszázs</span>
+                                    break;
+                                case BookingType.Massage2:
+                                    <span class="badge bg-success fs-6">Svéd masszázs</span>
+                                    break;
+                                case BookingType.Massage3:
+                                    <span class="badge bg-warning fs-6">Gyógymasszázs</span>
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Nincs megadva</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Állapot:</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Status.HasValue)
+                        {
+                            switch (Model.Status)
+                            {
+                                case BookingStatus.Pending:
+                                    <span class="badge bg-warning text-dark fs-6">Függõben</span>
+                                    <small class="text-muted d-block mt-1">A foglalás még nem lett megerõsítve</small>
+                                    break;
+                                case BookingStatus.Confirmed:
+                                    <span class="badge bg-success fs-6">Megerõsítve</span>
+                                    <small class="text-muted d-block mt-1">A foglalás megerõsített</small>
+                                    break;
+                                case BookingStatus.Cancelled:
+                                    <span class="badge bg-danger fs-6">Lemondva</span>
+                                    <small class="text-muted d-block mt-1">A foglalás le lett mondva</small>
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark fs-6">Függõben</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+            <div class="card-footer">
+                <a asp-action="Index" class="btn btn-secondary">Vissza a listához</a>
+                <a asp-action="Create" class="btn btn-primary">Új foglalás</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Hasznos információk</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted mb-2">
+                    <strong>Fontos:</strong> A foglalás lemondása legalább 24 órával az idõpont elõtt lehetséges.
+                </p>
+                <p class="small text-muted mb-2">
+                    <strong>Kapcsolat:</strong> Kérdés esetén hívjon minket a +36 1 234 5678 számon.
+                </p>
+                <p class="small text-muted mb-0">
+                    <strong>Cím:</strong> 1234 Budapest, Példa utca 12.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

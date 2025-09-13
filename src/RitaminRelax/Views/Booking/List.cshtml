@@ -1,0 +1,109 @@
+@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Foglalások listája";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>@ViewData["Title"]</h1>
+            <div>
+                <a asp-action="Index" class="btn btn-outline-secondary me-2">Naptár nézet</a>
+                <a asp-action="Create" class="btn btn-primary">Új foglalás</a>
+                <a asp-action="Random" class="btn btn-secondary">Demo foglalások</a>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Felhasználó</th>
+                            <th>Idõpont</th>
+                            <th>Idõtartam</th>
+                            <th>Típus</th>
+                            <th>Állapot</th>
+                            <th>Mûveletek</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{int index = 0;}
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@(item.User ?? "Vendég")</td>
+                                <td>@item.Time.ToString("yyyy.MM.dd HH:mm")</td>
+                                <td>
+                                    @if (item.Period.HasValue)
+                                    {
+                                        @(item.Period == BookingPeriod.T30 ? "30 perc" : "60 perc")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Type.HasValue)
+                                    {
+                                        switch (item.Type)
+                                        {
+                                            case BookingType.Massage1:
+                                                <span class="badge bg-info">Relaxációs masszázs</span>
+                                                break;
+                                            case BookingType.Massage2:
+                                                <span class="badge bg-success">Svéd masszázs</span>
+                                                break;
+                                            case BookingType.Massage3:
+                                                <span class="badge bg-warning">Gyógymasszázs</span>
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Status.HasValue)
+                                    {
+                                        switch (item.Status)
+                                        {
+                                            case BookingStatus.Pending:
+                                                <span class="badge bg-warning text-dark">Függõben</span>
+                                                break;
+                                            case BookingStatus.Confirmed:
+                                                <span class="badge bg-success">Megerõsítve</span>
+                                                break;
+                                            case BookingStatus.Cancelled:
+                                                <span class="badge bg-danger">Lemondva</span>
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Függõben</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@index" class="btn btn-sm btn-outline-primary">Részletek</a>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <h4>Nincsenek foglalások</h4>
+                <p>Jelenleg nincsenek foglalások a rendszerben.</p>
+                <a asp-action="Create" class="btn btn-primary">Hozz létre egyet</a>
+            </div>
+        }
+    </div>
+</div>

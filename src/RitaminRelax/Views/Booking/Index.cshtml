@@ -1,0 +1,266 @@
+@model DateTime
+@{
+    ViewData["Title"] = "Foglalás naptár";
+    var currentMonth = Model;
+    var firstDayOfMonth = new DateTime(currentMonth.Year, currentMonth.Month, 1);
+    var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+    var firstDayOfCalendar = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek + 1);
+    var lastDayOfCalendar = firstDayOfCalendar.AddDays(41);
+    
+    var today = DateTime.Today;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">@ViewData["Title"]</h1>
+            <div>
+                <a asp-action="List" class="btn btn-outline-primary me-2">Foglalások listája</a>
+                <a asp-action="Create" class="btn btn-primary">Új foglalás</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-outline-light btn-sm" onclick="previousMonth()">
+                        <i class="fas fa-chevron-left"></i> Elõzõ
+                    </button>
+                    <h4 class="mb-0">@currentMonth.ToString("yyyy. MMMM")</h4>
+                    <button class="btn btn-outline-light btn-sm" onclick="nextMonth()">
+                        Következõ <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="calendar-container">
+                    <table class="table table-bordered mb-0 calendar-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center py-3">Hétfõ</th>
+                                <th class="text-center py-3">Kedd</th>
+                                <th class="text-center py-3">Szerda</th>
+                                <th class="text-center py-3">Csütörtök</th>
+                                <th class="text-center py-3">Péntek</th>
+                                <th class="text-center py-3">Szombat</th>
+                                <th class="text-center py-3">Vasárnap</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var week = 0; week < 6; week++)
+                            {
+                                <tr>
+                                    @for (var day = 0; day < 7; day++)
+                                    {
+                                        var currentDay = firstDayOfCalendar.AddDays(week * 7 + day);
+                                        var isCurrentMonth = currentDay.Month == currentMonth.Month;
+                                        var isToday = currentDay.Date == today;
+                                        var isPast = currentDay.Date < today;
+                                        var isWeekend = currentDay.DayOfWeek == DayOfWeek.Saturday || currentDay.DayOfWeek == DayOfWeek.Sunday;
+                                        var isWeekday = !isWeekend;
+                                        
+                                        var cellClass = "calendar-day";
+                                        if (!isCurrentMonth) cellClass += " other-month";
+                                        if (isToday) cellClass += " today";
+                                        if (isPast && isCurrentMonth && isWeekday) cellClass += " past";
+                                        if (isCurrentMonth && !isPast && !isToday && isWeekday) cellClass += " available";
+                                        if (isWeekend) cellClass += " weekend";
+
+                                        <td class="@cellClass" data-date="@currentDay.ToString("yyyy-MM-dd")">
+                                            <div class="day-content">
+                                                <div class="day-number">@currentDay.Day</div>
+                                                @* Past weekdays: grey background, no text *@
+                                                @* Available weekdays: light green background, no text *@
+                                                @* Weekend days: empty, no text *@
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="legend-item">
+                            <span class="legend-color today-legend"></span>
+                            <small>Mai nap</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="legend-item">
+                            <span class="legend-color available-legend"></span>
+                            <small>Elérhetõ (hétköznap)</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="legend-item">
+                            <span class="legend-color weekend-legend"></span>
+                            <small>Hétvége (zárva)</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="legend-item">
+                            <span class="legend-color past-legend"></span>
+                            <small>Elmúlt nap</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="alert alert-info">
+                <h5><i class="fas fa-info-circle"></i> Foglalási információk</h5>
+                <p class="mb-2"><strong>Nyitvatartás:</strong> Hétfõ-Péntek: 8:00-20:00</p>
+                <p class="mb-2"><strong>Kezelési idõk:</strong> 30 és 60 perces idõtartamok</p>
+                <p class="mb-0"><strong>Foglalás:</strong> Kattints egy hétköznapi napra az elérhetõ idõpontok megtekintéséhez</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previousMonth() {
+            // TODO: Implement month navigation
+            console.log('Previous month clicked');
+        }
+        
+        function nextMonth() {
+            // TODO: Implement month navigation  
+            console.log('Next month clicked');
+        }
+
+        // Calendar day click handler - only for available weekdays
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarDays = document.querySelectorAll('.calendar-day.available');
+            
+            calendarDays.forEach(day => {
+                day.addEventListener('click', function() {
+                    const date = this.getAttribute('data-date');
+                    console.log('Selected date:', date);
+                    // TODO: Navigate to booking creation for selected date
+                    // window.location.href = '@Url.Action("Create")' + '?date=' + date;
+                });
+                
+                day.style.cursor = 'pointer';
+            });
+        });
+    </script>
+    
+    <style>
+        .calendar-container {
+            overflow-x: auto;
+        }
+        
+        .calendar-table {
+            min-width: 700px;
+        }
+        
+        .calendar-day {
+            height: 100px;
+            vertical-align: top;
+            padding: 8px;
+            position: relative;
+            border: 1px solid #dee2e6;
+        }
+        
+        .calendar-day.available:hover {
+            background-color: #c8e6c9;
+            cursor: pointer;
+        }
+        
+        .day-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .day-number {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .day-slots {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .calendar-day.today {
+            background-color: #1976d2 !important;
+            border-color: #0d47a1 !important;
+            color: white !important;
+        }
+        
+        .calendar-day.today .day-number {
+            color: white !important;
+            font-weight: bold;
+        }
+        
+        .today-text {
+            color: white !important;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .calendar-day.past {
+            background-color: #e0e0e0;
+            color: #757575;
+        }
+        
+        .calendar-day.available {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .calendar-day.other-month {
+            background-color: #fafafa;
+            color: #ccc;
+        }
+        
+        .calendar-day.weekend {
+            background-color: #fff3e0;
+        }
+        
+        .calendar-day.weekend .day-number {
+            color: #f57c00;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .today-legend {
+            background-color: #1976d2;
+            border-color: #0d47a1;
+        }
+        
+        .available-legend {
+            background-color: #e8f5e8;
+        }
+        
+        .weekend-legend {
+            background-color: #fff3e0;
+        }
+        
+        .past-legend {
+            background-color: #e0e0e0;
+        }
+    </style>
+}

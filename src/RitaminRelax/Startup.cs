@@ -28,6 +28,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddRazorPages();
+        services.AddControllersWithViews(); // Changed from AddControllers() to support MVC views
         services.AddControllers();
 
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
@@ -161,17 +162,23 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
+            
+            // Add default MVC route
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Booking}/{action=Index}/{id?}");
+                
             endpoints.MapControllers();
 
-            endpoints.MapGet("/", async context =>
-            {
-                var hostVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                var sn = AppDomain.CurrentDomain.GetAssemblies()
-                    .FirstOrDefault(a => a.GetName().Name == "SenseNet.Services.Core");
-                var snVersion = sn?.GetName().Version ?? new Version(0, 0, 0);
-                await context.Response.WriteAsync($"sensenet is listening." +
-                                                  $" sensenet version: {snVersion}, host version: {hostVersion}. ");
-            });
+            //endpoints.MapGet("/", async context =>
+            //{
+            //    var hostVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            //    var sn = AppDomain.CurrentDomain.GetAssemblies()
+            //        .FirstOrDefault(a => a.GetName().Name == "SenseNet.Services.Core");
+            //    var snVersion = sn?.GetName().Version ?? new Version(0, 0, 0);
+            //    await context.Response.WriteAsync($"sensenet is listening." +
+            //                                      $" sensenet version: {snVersion}, host version: {hostVersion}. ");
+            //});
 
             endpoints.MapGet("/recorder", async context =>
             {

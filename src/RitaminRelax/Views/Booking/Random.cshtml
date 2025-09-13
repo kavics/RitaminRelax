@@ -1,0 +1,95 @@
+@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Demo foglalások";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>@ViewData["Title"]</h1>
+        
+        <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle"></i> Démó adatok</h5>
+            <p class="mb-0">Az alábbi foglalások véletlenszerûen generált démó adatok. Minden oldal frissítésekor új adatokat látsz.</p>
+        </div>
+
+        <p>
+            <a asp-action="Index" class="btn btn-primary">Vissza a valós foglalásokhoz</a>
+            <button onclick="location.reload()" class="btn btn-secondary">Új démó adatok generálása</button>
+        </p>
+
+        @if (Model.Any())
+        {
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">@item.User</h6>
+                                @if (item.Status.HasValue)
+                                {
+                                    switch (item.Status)
+                                    {
+                                        case BookingStatus.Pending:
+                                            <span class="badge bg-warning text-dark">Függõben</span>
+                                            break;
+                                        case BookingStatus.Confirmed:
+                                            <span class="badge bg-success">Megerõsítve</span>
+                                            break;
+                                        case BookingStatus.Cancelled:
+                                            <span class="badge bg-danger">Lemondva</span>
+                                            break;
+                                    }
+                                }
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>Idõpont:</strong><br>
+                                    <span class="text-primary">@item.Time.ToString("yyyy.MM.dd HH:mm")</span>
+                                </p>
+                                
+                                @if (item.Period.HasValue)
+                                {
+                                    <p class="card-text">
+                                        <strong>Idõtartam:</strong><br>
+                                        @(item.Period == BookingPeriod.T30 ? "30 perc" : "60 perc")
+                                    </p>
+                                }
+                                
+                                @if (item.Type.HasValue)
+                                {
+                                    <p class="card-text">
+                                        <strong>Típus:</strong><br>
+                                        @switch (item.Type)
+                                        {
+                                            case BookingType.Massage1:
+                                                <span class="badge bg-info">Relaxációs masszázs</span>
+                                                break;
+                                            case BookingType.Massage2:
+                                                <span class="badge bg-success">Svéd masszázs</span>
+                                                break;
+                                            case BookingType.Massage3:
+                                                <span class="badge bg-warning">Gyógymasszázs</span>
+                                                break;
+                                        }
+                                    </p>
+                                }
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">Generált: @DateTime.Now.ToString("HH:mm:ss")</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <h4>Nincsenek démó adatok</h4>
+                <p>Jelenleg nincsenek démó adatok generálva.</p>
+                <button onclick="location.reload()" class="btn btn-primary">Próbáld újra</button>
+            </div>
+        }
+    </div>
+</div>
