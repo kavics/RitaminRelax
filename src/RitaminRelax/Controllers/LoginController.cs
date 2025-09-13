@@ -49,11 +49,18 @@ public class LoginController(IApiKeyManager apiKeyManager, ILogger<LoginControll
 
         var apiKey = await GetOrCreateApiKeyAsync(loggedInUser.Id, loggedInUser.Email).ConfigureAwait(false);
 
-        var token = apiKey?.Value;
+        var token = apiKey.Value;
 
-        // Add token to response headers
-        Response.Headers["ApiKey"] = token;
-        
+        // Add token to cookies
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true, // Biztonságos: javaScript nem férhet hozzá.
+            Secure = Request.IsHttps,
+            SameSite = SameSiteMode.Strict,
+            Expires = apiKey.ExpirationDate
+        };
+        Response.Cookies.Append("RRApiKey", token);
+
         return new LoginResponse
         {
             UserName = userName,

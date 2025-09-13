@@ -137,6 +137,10 @@ public class Startup
 
         // [sensenet]: custom CORS policy
         app.UseSenseNetCors();
+
+        // [RR]: API Key Cookie middleware - FONTOS: SenseNet Authentication ELŐTT!
+        app.UseMiddleware<ApiKeyCookieMiddleware>();
+
         // [sensenet]: use Authentication and set User.Current
         app.UseSenseNetAuthentication();
 

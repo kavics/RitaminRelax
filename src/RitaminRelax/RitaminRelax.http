@@ -46,10 +46,10 @@ ApiKey:{{user2}}
 ###
 POST {{host}}/booking
 Content-Type: application/json
-ApiKey:{{user2}}
+ApiKey:{{user1}}
 
 {
-  "time": "2025-08-24T16:00:00",
-  "period": 30,
-  "type": "Masszázs-1"
+  "time": "2025-09-22T14:00:00",
+  "period": 60,
+  "type": "Masszázs-3"
 }

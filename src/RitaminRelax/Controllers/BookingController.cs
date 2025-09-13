@@ -68,6 +68,7 @@ public class BookingController : ControllerBase
                 }
                 return r;
             })
+            .OrderBy(b => b.Time)
             .ToArray();
 
         return result;
@@ -82,17 +83,17 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> Post([FromBody] BookingRequest request)
     {
         var user = (SNCR.User)SNCR.User.Current;
-        if(user.Id == Identifiers.VisitorUserId)
-        {
+        if (user == null)
+            return BadRequest("Unknown user");
+        if (user.Id == Identifiers.VisitorUserId)
             return Forbid("Authentication required");
-        }
 
         try
         {
             using var _ = new SystemAccount();
 
             var booking = new Booking(RRTools.BookingContainer);
-            booking.Name = $"{request.time:yyyy-MM-dd_HH-mm}_{AccessProvider.Current.GetOriginalUser().Name}";
+            booking.Name = $"{request.time:yyyy-MM-dd_HH-mm}_{user.LoginName}";
             booking.Customer = user;
             booking.BookingTime = request.time;
             booking.BookingPeriod = request.period;
