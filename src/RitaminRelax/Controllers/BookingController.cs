@@ -16,10 +16,27 @@ public class BookingController : Controller
     /// <summary>
     /// Index page showing calendar view for booking
     /// </summary>
-    /// <returns>Calendar view for the current month</returns>
-    public IActionResult Index()
+    /// <param name="year">Year for the calendar (optional)</param>
+    /// <param name="month">Month for the calendar (optional)</param>
+    /// <returns>Calendar view for the specified month</returns>
+    public IActionResult Index(int? year, int? month)
     {
         var currentDate = DateTime.Today;
+        
+        // If year and month are provided, use them; otherwise use current date
+        if (year.HasValue && month.HasValue)
+        {
+            try
+            {
+                currentDate = new DateTime(year.Value, month.Value, 1);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // If invalid date parameters, fall back to current date
+                currentDate = DateTime.Today;
+            }
+        }
+        
         return View(currentDate);
     }
 

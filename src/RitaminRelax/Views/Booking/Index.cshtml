@@ -8,6 +8,8 @@
     var lastDayOfCalendar = firstDayOfCalendar.AddDays(41);
     
     var today = DateTime.Today;
+    var previousMonth = currentMonth.AddMonths(-1);
+    var nextMonth = currentMonth.AddMonths(1);
 }
 
 <div class="row">
@@ -23,13 +25,15 @@
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-outline-light btn-sm" onclick="previousMonth()">
+                    <a asp-action="Index" asp-route-year="@previousMonth.Year" asp-route-month="@previousMonth.Month" 
+                       class="btn btn-outline-light btn-sm">
                         <i class="fas fa-chevron-left"></i> Elõzõ
-                    </button>
+                    </a>
                     <h4 class="mb-0">@currentMonth.ToString("yyyy. MMMM")</h4>
-                    <button class="btn btn-outline-light btn-sm" onclick="nextMonth()">
+                    <a asp-action="Index" asp-route-year="@nextMonth.Year" asp-route-month="@nextMonth.Month" 
+                       class="btn btn-outline-light btn-sm">
                         Következõ <i class="fas fa-chevron-right"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
             <div class="card-body p-0">
@@ -69,6 +73,12 @@
                                         <td class="@cellClass" data-date="@currentDay.ToString("yyyy-MM-dd")">
                                             <div class="day-content">
                                                 <div class="day-number">@currentDay.Day</div>
+                                                @if (isToday)
+                                                {
+                                                    <div class="day-slots">
+                                                        <small class="today-text">Ma</small>
+                                                    </div>
+                                                }
                                             </div>
                                         </td>
                                     }
@@ -95,7 +105,7 @@
                     <div class="col-md-3">
                         <div class="legend-item">
                             <span class="legend-color weekend-legend"></span>
-                            <small>Hétvége (zárva)</small>
+                            <small>Hétvége</small>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -121,16 +131,6 @@
 
 @section Scripts {
     <script>
-        function previousMonth() {
-            // TODO: Implement month navigation
-            console.log('Previous month clicked');
-        }
-        
-        function nextMonth() {
-            // TODO: Implement month navigation  
-            console.log('Next month clicked');
-        }
-
         // Calendar day click handler - only for available weekdays
         document.addEventListener('DOMContentLoaded', function() {
             const calendarDays = document.querySelectorAll('.calendar-day.available');
