@@ -37,7 +37,17 @@ public class BookingController : Controller
             }
         }
         
-        return View(currentDate);
+        // Get bookings for the calendar view
+        var bookings = GetBookings();
+        
+        // Create calendar model with bookings
+        var calendarModel = new CalendarViewModel
+        {
+            CurrentMonth = currentDate,
+            Bookings = bookings.ToList()
+        };
+        
+        return View(calendarModel);
     }
 
     /// <summary>
@@ -139,9 +149,9 @@ public class BookingController : Controller
         {
             return
             [
-                new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), },
-                new Booking { Time = DateTime.Today.AddDays(2).AddHours(16) },
-                new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), }
+                new Booking { Time = DateTime.Today.AddDays(1).AddHours(16), Status = BookingStatus.Pending },
+                new Booking { Time = DateTime.Today.AddDays(2).AddHours(16), Status = BookingStatus.Confirmed },
+                new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), Status = BookingStatus.Cancelled }
             ];
         }
         
@@ -154,7 +164,7 @@ public class BookingController : Controller
                 new Booking
                 {
                     User = "TestUser1",
-                    Time = DateTime.Today.AddDays(1).AddHours(16),
+                    Time = DateTime.Today.AddDays(1).AddHours(15),
                     Period = BookingPeriod.T60,
                     Type = BookingType.Massage1,
                     Status = BookingStatus.Confirmed
@@ -162,7 +172,7 @@ public class BookingController : Controller
                 new Booking
                 {
                     User = "TestUser2",
-                    Time = DateTime.Today.AddDays(2).AddHours(16),
+                    Time = DateTime.Today.AddDays(1).AddHours(16),
                     Period = BookingPeriod.T30,
                     Type = BookingType.Massage2,
                     Status = BookingStatus.Pending
@@ -174,6 +184,22 @@ public class BookingController : Controller
                     Period = BookingPeriod.T60,
                     Type = BookingType.Massage3,
                     Status = BookingStatus.Confirmed
+                },
+                new Booking
+                {
+                    User = "TestUser4",
+                    Time = DateTime.Today.AddDays(2).AddHours(18),
+                    Period = BookingPeriod.T30,
+                    Type = BookingType.Massage1,
+                    Status = BookingStatus.Cancelled
+                },
+                new Booking
+                {
+                    User = "TestUser5",
+                    Time = DateTime.Today.AddDays(3).AddHours(15),
+                    Period = BookingPeriod.T60,
+                    Type = BookingType.Massage2,
+                    Status = BookingStatus.Pending
                 }
             ];
         }
@@ -188,7 +214,7 @@ public class BookingController : Controller
                 Type = BookingType.Massage2,
                 Status = BookingStatus.Confirmed
             },
-            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), Status = BookingStatus.Pending }
+            new Booking { Time = DateTime.Today.AddDays(2).AddHours(17), Status = BookingStatus.Cancelled }
         ];
     }
 
@@ -201,7 +227,7 @@ public class BookingController : Controller
         return Enumerable.Range(0, 2).Select(i => new Booking
         {
             User = $"DemoUser{_random.Next(1, 100)}",
-            Time = DateTime.Today.AddDays(_random.Next(1, 30)).AddHours(_random.Next(8, 20)),
+            Time = DateTime.Today.AddDays(_random.Next(1, 30)).AddHours(_random.Next(15, 20)),
             Period = periods[_random.Next(periods.Length)],
             Type = types[_random.Next(types.Length)],
             Status = statuses[_random.Next(statuses.Length)]
