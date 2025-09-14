@@ -2,16 +2,17 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RitaminRelax.Middleware;
 using SenseNet.Configuration;
+using SenseNet.ContentRepository;
 using SenseNet.ContentRepository.Security.ApiKeys;
 using SenseNet.Diagnostics;
 using SenseNet.Extensions.DependencyInjection;
+using SenseNet.Search.Lucene29;
 using SenseNet.Services.Core.Authentication;
 using SnWebApplication.Api.Sql.TokenAuth.TokenValidator;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using SenseNet.ContentRepository;
-using SenseNet.Search.Lucene29;
 
 namespace RitaminRelax;
 
@@ -138,6 +139,10 @@ public class Startup
 
         // [sensenet]: custom CORS policy
         app.UseSenseNetCors();
+
+        // [manfred]: API Key Cookie middleware - before SenseNet Authentication!
+        app.UseMiddleware<ApiKeyCookieMiddleware>();
+
         // [sensenet]: use Authentication and set User.Current
         app.UseSenseNetAuthentication();
 

@@ -1,0 +1,74 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Bejelentkezés";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0 text-center">
+                    <i class="fas fa-sign-in-alt me-2"></i>Bejelentkezés
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="NameOrEmail" class="form-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input asp-for="NameOrEmail" class="form-control" placeholder="felhasznalo vagy pelda@email.hu" />
+                        </div>
+                        <span asp-validation-for="NameOrEmail" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input asp-for="Password" class="form-control" placeholder="Adja meg jelszavát" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Bejelentkezés
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small class="text-muted">
+                    Nincs még fiókja? 
+                    <a href="#" class="text-decoration-none">Regisztráció</a>
+                </small>
+                <br>
+                <small class="text-muted mt-2 d-block">
+                    <a href="#" class="text-decoration-none">Elfelejtett jelszó?</a>
+                </small>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a asp-controller="Booking" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Vissza a naptárhoz
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
